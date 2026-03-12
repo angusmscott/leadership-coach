@@ -1,7 +1,8 @@
+import os
 from typing import Optional
 
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
@@ -29,15 +30,30 @@ async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.post("/api/chat", response_model=ChatResponse)
+@app.post("/api/chat")
 async def chat(message: ChatMessage):
-    response, conversation_id = await get_chat_response(
-        message.message,
-        message.conversation_id,
-    )
-    return ChatResponse(response=response, conversation_id=conversation_id)
+    try:
+        response, conversation_id = await get_chat_response(
+            message.message,
+            message.conversation_id,
+        )
+        return ChatResponse(response=response, conversation_id=conversation_id)
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": str(e), "type": type(e).__name__}
+        )
 
 
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.get("/debug")
+async def debug():
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "NOT SET")
+    return {
+        "api_key_set": api_key != "NOT SET",
+        "api_key_preview": api_key[:20] + "..." if api_key != "NOT SET" else "NOT SET"
+    }
