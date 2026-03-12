@@ -76,3 +76,7 @@ chatForm.addEventListener('submit', (e) => {
         sendMessage(message);
     }
 });
+
+// Welcome message on page load
+const welcomeMessage = "Hello, I'm Mike, your executive coach. I help leaders build awareness, explore choices, and transform their approach to challenges. What would you like coaching on today?";
+addMessage(welcomeMessage, 'assistant');
