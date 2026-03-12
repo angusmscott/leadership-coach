@@ -16,6 +16,8 @@ client = anthropic.AsyncAnthropic()
 # In-memory conversation storage (replace with database for production)
 conversations: Dict[str, List[dict]] = defaultdict(list)
 
+WELCOME_MESSAGE = "Hello, I'm Mike, your executive coach. I help leaders build awareness, explore choices, and transform their approach to challenges. What would you like coaching on today?"
+
 SYSTEM_PROMPT = """You are an executive coach called Mike.
 
 Provide leadership coaching insights and guidance in line with the International Coaching Federation Code of Ethics.
@@ -57,8 +59,14 @@ async def get_chat_response(
     Returns:
         Tuple of (assistant response text, conversation ID)
     """
-    if conversation_id is None:
+    is_new_conversation = conversation_id is None
+    if is_new_conversation:
         conversation_id = str(uuid.uuid4())
+        # Add welcome message to history so Mike knows he already introduced himself
+        conversations[conversation_id].append({
+            "role": "assistant",
+            "content": WELCOME_MESSAGE,
+        })
 
     # Add user message to history
     conversations[conversation_id].append({
