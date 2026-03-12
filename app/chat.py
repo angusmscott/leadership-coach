@@ -1,3 +1,4 @@
+import logging
 import uuid
 from collections import defaultdict
 from typing import Dict, List, Optional, Tuple
@@ -6,6 +7,9 @@ import anthropic
 from dotenv import load_dotenv
 
 load_dotenv()
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 client = anthropic.AsyncAnthropic()
 
@@ -61,14 +65,17 @@ async def get_chat_response(
     })
 
     # Call Claude API
-    response = await client.messages.create(
-        model="claude-sonnet-4-20250514",
-        max_tokens=1024,
-        system=SYSTEM_PROMPT,
-        messages=conversations[conversation_id],
-    )
-
-    assistant_message = response.content[0].text
+    try:
+        response = await client.messages.create(
+            model="claude-3-5-sonnet-20241022",
+            max_tokens=1024,
+            system=SYSTEM_PROMPT,
+            messages=conversations[conversation_id],
+        )
+        assistant_message = response.content[0].text
+    except Exception as e:
+        logger.error(f"Anthropic API error: {e}")
+        raise
 
     # Add assistant response to history
     conversations[conversation_id].append({
