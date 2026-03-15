@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from app.chat import get_chat_response
 
-app = FastAPI(title="Act - Claude Chatbot")
+app = FastAPI(title="The Leadership Equation — Developmental Copilot")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
@@ -48,12 +48,3 @@ async def chat(message: ChatMessage):
 @app.get("/health")
 async def health():
     return {"status": "ok"}
-
-
-@app.get("/debug")
-async def debug():
-    api_key = os.environ.get("ANTHROPIC_API_KEY", "NOT SET")
-    return {
-        "api_key_set": api_key != "NOT SET",
-        "api_key_preview": api_key[:20] + "..." if api_key != "NOT SET" else "NOT SET"
-    }

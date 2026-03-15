@@ -22,4 +22,4 @@ async def test_health(client):
 async def test_index(client):
     response = await client.get("/")
     assert response.status_code == 200
-    assert "Act" in response.text
+    assert "Leadership Equation" in response.text

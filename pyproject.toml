@@ -1,7 +1,7 @@
 [project]
-name = "act"
+name = "leadership-equation"
 version = "0.1.0"
-description = "A chatbot web app powered by Claude"
+description = "The Leadership Equation — Developmental Copilot"
 requires-python = ">=3.9"
 dependencies = [
     "fastapi>=0.109.0",
