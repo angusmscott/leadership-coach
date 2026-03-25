@@ -1,10 +1,9 @@
 import os
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 from app.chat import get_chat_response
@@ -12,7 +11,6 @@ from app.chat import get_chat_response
 app = FastAPI(title="The Leadership Equation — Developmental Copilot")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
 
 
 class ChatMessage(BaseModel):
@@ -26,8 +24,8 @@ class ChatResponse(BaseModel):
 
 
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+async def index():
+    return FileResponse("templates/index.html")
 
 
 @app.post("/api/chat")
