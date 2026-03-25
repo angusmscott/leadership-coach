@@ -202,6 +202,13 @@ body {
     padding: 8px 12px;
     border-radius: 6px;
     transition: background 0.2s ease;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    color: inherit;
+    font: inherit;
+    text-align: left;
 }
 
 .scale-level:hover {

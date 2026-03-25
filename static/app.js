@@ -17,23 +17,23 @@ let conversationId = null;
 const variableInfo = {
     context: {
         title: 'Context — The Surrounding System',
-        body: `Complexity, uncertainty, structure, expectations, history, incentives, culture. Context does not excuse leadership — but it does shape what is triggered, rewarded, or required.\n\nThe same identity can work brilliantly in one context and quietly become a liability in another.\n\nEvery context carries power (where influence sits), pace (how decisions get made), and norms (what counts as "good leadership," spoken or not).`
+        body: `The relevant environment you're leading in. Context is not the immediate situation — a situation sits inside a context.\n\nContext includes four dimensions:\n• Power — how decisions really move\n• Pace — how fast things move\n• Norms — what gets rewarded, avoided, or left unsaid\n• Safety — what feels safe or unsafe to say, feel, or show\n\nContext shapes everything else in the equation. The same identity can work brilliantly in one context and quietly become a liability in another.`
     },
     i: {
         title: 'i — Leadership Identity',
-        body: `The internal map you lead from. Your beliefs, patterns, assumptions, and protective strategies — the shaped self at work.\n\nThe part of you that says, often silently: "this is who I need to be to succeed, belong, stay safe, or matter here."\n\nIdentity forms at the intersection of internal wiring, external reinforcement, and repeated experience inside a context.`
+        body: `The patterned way you've learned to be in order to succeed, belong, cope, or stay safe in leadership. i is the constructed self, not the whole self.\n\nThree forces shape a leader:\n• Personality (Can Do) — what comes naturally\n• i (Have To) — what was expected, reinforced, or needed\n• Spark (Love To) — what feels alive and true\n\ni develops through four stages (WPSi): Wired → Patterned → Shaped → i.\n\nThe equation is pattern-agnostic. Sarah's i was control. Yours may be people-pleasing, perfectionism, rescuing, conflict avoidance, or something else entirely.`
     },
     u: {
         title: 'U — Presence',
-        body: `The expression of identity. U is what your internal world looks like as behaviour, tone, pace, energy, and attention.\n\nIt is the bridge between your inner experience and everyone else's experience of you.\n\nPresence moves before awareness — when identity is activated, it shows up in the body first: tightness, urgency, narrowing of attention.`
+        body: `How your leadership is felt inwardly and expressed outwardly in real time. U has two dimensions:\n\n• Felt U — what is happening in you: emotion, body, inner state\n• Expressed U — tone, pace, posture, silence, interruption, pressure, spaciousness\n\nU is often the first doorway into awareness, because leadership is felt before it is fully understood. i is the inner game. x is the outer game. U is the bridge between them.`
     },
     x: {
         title: 'x — Impact',
-        body: `What your leadership creates in others and in the work. Not just what gets done — but what it feels like to work around you while it gets done.\n\nThe quality of decisions, trust, ownership, energy, and culture that forms in your wake.\n\nImpact includes relationships and results — together.`
+        body: `How your leadership is received and what it creates — measured across two dimensions:\n\n• Results — what got done, and whether the system that produced it is resilient\n• Relationships — the relational climate created: trust, ownership, psychological safety, development\n\nx cannot be fully known from the inside. It requires feedback. The question x is always asking: what is your leadership actually creating around you?`
     },
     spark: {
         title: 'Spark — The Deeper Source',
-        body: `The part of you that gives leadership meaning — purpose, values, conviction, care.\n\nSpark is what you want to contribute, build, and serve in a way that feels deeply true. It is what gives you something more powerful than habit to lead from.\n\nSpark is not happiness. It's the inner signal of meaning, aliveness, care, and direction.`
+        body: `The part of you that feels alive, meaningful, and true — sometimes called the true self.\n\nThree forces shape a leader:\n• Personality (Can Do) — what comes naturally\n• i (Have To) — what was expected or needed\n• Spark (Love To) — what feels alive, meaningful, and true\n\nSpark is often buried under i, dimmed by context, replaced by Have To — but never gone. When Spark goes quiet, leadership can still function. It just starts to feel flat.`
     }
 };
 
@@ -175,6 +175,34 @@ document.querySelectorAll('.eq-var').forEach(btn => {
     });
 });
 
+// Scale level info modals
+const scaleInfo = {
+    reactive: {
+        title: 'Level 1 — Reactive',
+        body: `Inside the pattern. It runs before you notice it — like gravity, not a decision. Identity is automatic and unquestioned. Signals are faint or ignored.\n\n"I didn't realise I was doing it."\n\nMost early work with this tool is helping people move from here toward Level 2.`
+    },
+    reflective: {
+        title: 'Level 2 — Reflective',
+        body: `Can see the pattern after the fact. Recognising it with distance. The gap between action and awareness is closing but still present.\n\n"I can see what happened now."\n\nMost coaching work lives here. The pattern is visible — but usually in the rear-view mirror.`
+    },
+    responsive: {
+        title: 'Level 3 — Responsive',
+        body: `Aware in the moment. Can notice and choose in real time.\n\n"I felt the old pattern arrive — and I stayed still."\n\nThis is rare, intermittent, and worth noticing when it happens. People do not arrive at Level 3 and stay there. Awareness fluctuates.`
+    }
+};
+
+document.querySelectorAll('.scale-level').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const levelKey = btn.dataset.level;
+        const info = scaleInfo[levelKey];
+        if (info) {
+            modalTitle.textContent = info.title;
+            modalBody.textContent = info.body;
+            modalOverlay.classList.add('active');
+        }
+    });
+});
+
 modalClose.addEventListener('click', () => {
     modalOverlay.classList.remove('active');
 });
@@ -187,11 +215,11 @@ modalOverlay.addEventListener('click', (e) => {
 
 // Welcome message
 function addWelcomeMessage() {
-    const welcome = `Welcome to the Leadership Equation companion — a space to reflect on your leadership in the moments that matter.
+    const welcome = `Welcome to the Your Leadership Equation companion — a reflective reading tool built around the book.
 
-This isn't coaching, and it isn't advice. It's a place to notice — what's happening in your leadership, which patterns are showing up, and where your awareness is growing.
+This isn't coaching, and it isn't advice. It's a space to explore how you lead — which patterns show up, what they create, and where your awareness is growing.
 
-What's on your mind? A recent moment, a meeting, a pattern you've been noticing — wherever you'd like to start.`;
+What's on your mind? A moment, a meeting, a pattern you've been sitting with — wherever you'd like to start.`;
 
     addMessage(welcome, 'assistant', true);
 }
