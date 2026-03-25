@@ -5,6 +5,7 @@ const sendBtn = document.getElementById('send-btn');
 const menuToggle = document.getElementById('menu-toggle');
 const sidebar = document.getElementById('sidebar');
 const newChatBtn = document.getElementById('new-chat-btn');
+const modelSelect = document.getElementById('model-select');
 const modalOverlay = document.getElementById('modal-overlay');
 const modalTitle = document.getElementById('modal-title');
 const modalBody = document.getElementById('modal-body');
@@ -93,6 +94,7 @@ async function sendMessage(message) {
             body: JSON.stringify({
                 message: message,
                 conversation_id: conversationId,
+                model: modelSelect.value,
             }),
         });
 

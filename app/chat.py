@@ -146,6 +146,7 @@ Bad: "Based on what you've described, I'd rate your awareness at a 1 for identit
 async def get_chat_response(
     user_message: str,
     conversation_id: Optional[str] = None,
+    model: str = "claude-sonnet-4-6",
 ) -> Tuple[str, str]:
     """
     Send a message to Claude and get a response.
@@ -174,7 +175,7 @@ async def get_chat_response(
     # Call Claude API
     try:
         response = await client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model=model,
             max_tokens=1024,
             system=SYSTEM_PROMPT,
             messages=conversations[conversation_id],

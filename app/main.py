@@ -16,6 +16,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 class ChatMessage(BaseModel):
     message: str
     conversation_id: Optional[str] = None
+    model: str = "claude-sonnet-4-6"
 
 
 class ChatResponse(BaseModel):
@@ -34,6 +35,7 @@ async def chat(message: ChatMessage):
         response, conversation_id = await get_chat_response(
             message.message,
             message.conversation_id,
+            message.model,
         )
         return ChatResponse(response=response, conversation_id=conversation_id)
     except Exception as e:
