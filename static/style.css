@@ -4,33 +4,46 @@
    ============================================ */
 
 :root {
-    /* ACT Brand palette — from actleader.com */
-    --act-charcoal: #1a1a2e;
-    --act-dark: #16213e;
-    --act-navy: #0f3460;
-    --act-navy-light: #1a3a5c;
-    --act-slate: #2c4a6e;
-    --act-slate-light: #7b8fa3;
-    --act-cream: #f5f0e8;
-    --act-cream-muted: #d4cec3;
+    /* ACT Brand palette — from ACT Leadership brand guide 2026 */
+
+    /* Primary palette: dark grey + yellow + white */
+    --act-charcoal: #253842;        /* Dark grey — primary backgrounds */
+    --act-dark: #1c2d36;            /* Darker variant for sidebar depth */
+    --act-mid: #2f4757;             /* Mid tone for layered elements */
     --act-white: #ffffff;
-    --act-off-white: #faf8f5;
+    --act-off-white: #f5f8fa;
 
-    /* ACT accent colors — golden yellow, teal, coral */
-    --act-gold: #e8a838;
-    --act-gold-light: #f0bc5e;
-    --act-gold-muted: rgba(232, 168, 56, 0.12);
-    --act-teal: #2a9d8f;
-    --act-teal-muted: rgba(42, 157, 143, 0.12);
-    --act-coral: #e76f51;
-    --act-coral-muted: rgba(231, 111, 81, 0.12);
+    /* Text on dark backgrounds */
+    --act-cream: #dceaf0;           /* Primary body text on dark bg */
+    --act-cream-muted: #8aabbc;     /* Secondary/muted text */
 
-    /* Variable colors — matching the equation page graphics */
+    /* Primary accent — sunshine yellow */
+    /* Used for: ACT logo, accent in all branded communications */
+    --act-gold: #ffd33f;            /* Yellow primary */
+    --act-gold-light: #ffd97c;      /* Yellow mid — hover states */
+    --act-gold-muted: rgba(255, 211, 63, 0.12);
+
+    /* Secondary palette — pastels for depth and variety */
+    /* Used to: complement the bold primary palette; lighter shades for depth in illustrated elements */
+    --act-teal: #5ea195;            /* ACT green */
+    --act-teal-light: #9ac3ba;      /* ACT green light */
+    --act-teal-muted: rgba(94, 161, 149, 0.12);
+    --act-coral: #ea8566;           /* ACT coral */
+    --act-coral-light: #f5a888;     /* ACT coral light */
+    --act-coral-muted: rgba(234, 133, 102, 0.12);
+    --act-blue: #5390b5;            /* ACT blue */
+    --act-blue-light: #b1c7d8;      /* ACT blue light */
+
+    /* Slate — derived from ACT blue for UI elements (labels, borders, scrollbars) */
+    --act-slate: #5390b5;
+    --act-slate-light: #8aabbc;
+
+    /* Variable colors — equation sidebar */
     --color-context: var(--act-slate-light);
     --color-i: var(--act-gold);
     --color-u: var(--act-teal);
     --color-x: var(--act-coral);
-    --color-spark: #c4a0d8;
+    --color-spark: var(--act-teal-light);
 
     /* Typography */
     --font-display: 'Cormorant Garamond', Georgia, serif;
@@ -73,7 +86,7 @@ body {
 
 .sidebar {
     width: var(--sidebar-width);
-    background: linear-gradient(180deg, #0d1b2a 0%, var(--act-charcoal) 100%);
+    background: linear-gradient(180deg, var(--act-dark) 0%, var(--act-charcoal) 100%);
     border-right: 1px solid rgba(255, 255, 255, 0.06);
     display: flex;
     flex-direction: column;
@@ -87,31 +100,12 @@ body {
     margin-bottom: 36px;
 }
 
-.logo-mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border: 1.5px solid var(--act-gold);
+.equation-image {
+    width: 100%;
+    height: auto;
     border-radius: 10px;
-    font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--act-gold);
-    margin-bottom: 16px;
-    letter-spacing: -0.5px;
-    background: rgba(232, 168, 56, 0.06);
-}
-
-.brand-title {
-    font-family: var(--font-display);
-    font-size: 22px;
-    font-weight: 500;
-    line-height: 1.25;
-    color: var(--act-white);
-    letter-spacing: -0.3px;
-    margin-bottom: 6px;
+    margin-bottom: 12px;
+    display: block;
 }
 
 .brand-subtitle {
@@ -315,8 +309,8 @@ body {
 }
 
 .new-chat-btn:hover {
-    background: rgba(232, 168, 56, 0.1);
-    border-color: rgba(232, 168, 56, 0.25);
+    background: rgba(255, 211, 63, 0.1);
+    border-color: rgba(255, 211, 63, 0.25);
     color: var(--act-gold);
 }
 
@@ -364,14 +358,14 @@ body {
 }
 
 .message.assistant .message-bubble {
-    background: linear-gradient(135deg, rgba(15, 52, 96, 0.4), rgba(26, 26, 46, 0.6));
-    border: 1px solid rgba(42, 157, 143, 0.1);
+    background: linear-gradient(135deg, rgba(37, 56, 66, 0.6), rgba(28, 45, 54, 0.8));
+    border: 1px solid rgba(83, 144, 181, 0.15);
     color: var(--act-cream);
     border-bottom-left-radius: 4px;
 }
 
 .message.user .message-bubble {
-    background: linear-gradient(135deg, var(--act-navy), var(--act-slate));
+    background: linear-gradient(135deg, var(--act-charcoal), var(--act-mid));
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--act-white);
     border-bottom-right-radius: 4px;
@@ -385,8 +379,8 @@ body {
 }
 
 .message.assistant.welcome .message-bubble {
-    background: linear-gradient(135deg, rgba(15, 52, 96, 0.3), rgba(232, 168, 56, 0.06));
-    border-color: rgba(232, 168, 56, 0.15);
+    background: linear-gradient(135deg, rgba(37, 56, 66, 0.4), rgba(255, 211, 63, 0.06));
+    border-color: rgba(255, 211, 63, 0.15);
 }
 
 /* Typing indicator */
@@ -395,8 +389,8 @@ body {
     display: flex;
     gap: 5px;
     padding: 16px 20px;
-    background: linear-gradient(135deg, rgba(15, 52, 96, 0.4), rgba(26, 26, 46, 0.6));
-    border: 1px solid rgba(42, 157, 143, 0.1);
+    background: linear-gradient(135deg, rgba(37, 56, 66, 0.6), rgba(28, 45, 54, 0.8));
+    border: 1px solid rgba(83, 144, 181, 0.15);
     border-radius: 12px;
     border-bottom-left-radius: 4px;
     align-self: flex-start;
@@ -431,7 +425,7 @@ body {
     display: flex;
     align-items: flex-end;
     gap: 10px;
-    background: rgba(15, 52, 96, 0.3);
+    background: rgba(37, 56, 66, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 6px 6px 6px 18px;
@@ -439,8 +433,8 @@ body {
 }
 
 .input-wrapper:focus-within {
-    border-color: rgba(232, 168, 56, 0.35);
-    box-shadow: 0 0 0 3px rgba(232, 168, 56, 0.08);
+    border-color: rgba(255, 211, 63, 0.35);
+    box-shadow: 0 0 0 3px rgba(255, 211, 63, 0.08);
 }
 
 #message-input {
@@ -504,7 +498,7 @@ body {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(10, 12, 24, 0.88);
+    background: rgba(20, 30, 35, 0.88);
     backdrop-filter: blur(6px);
     z-index: 100;
     align-items: center;
@@ -516,7 +510,7 @@ body {
 
 .modal {
     background: linear-gradient(135deg, var(--act-dark), var(--act-charcoal));
-    border: 1px solid rgba(232, 168, 56, 0.15);
+    border: 1px solid rgba(255, 211, 63, 0.15);
     border-radius: 16px;
     padding: 32px;
     max-width: 480px;
