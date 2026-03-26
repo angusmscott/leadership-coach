@@ -224,6 +224,9 @@ What's on your mind? A moment, a meeting, a pattern you've been sitting with —
 let welcomeText = FALLBACK_WELCOME;
 
 async function addWelcomeMessage() {
+    messageInput.disabled = true;
+    sendBtn.disabled = true;
+    messageInput.placeholder = 'Loading…';
     try {
         const res = await fetch('/api/welcome');
         if (!res.ok) throw new Error('Failed to fetch welcome');
@@ -232,6 +235,11 @@ async function addWelcomeMessage() {
         addMessage(welcomeText, 'assistant', true);
     } catch (e) {
         addMessage(FALLBACK_WELCOME, 'assistant', true);
+    } finally {
+        messageInput.disabled = false;
+        sendBtn.disabled = false;
+        messageInput.placeholder = 'Type your message...';
+        messageInput.focus();
     }
 }
 

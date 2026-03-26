@@ -26,10 +26,10 @@ WELCOME_META_PROMPT = """You are generating a short welcome message for the Your
 
 Write a warm, slightly different greeting each time. It must:
 - Mention the Leadership Equation and its five variables: Context, Leadership Identity, Leadership Presence, Leadership Impact, and Spark
-- Briefly explain this is a reflective space (not coaching, not advice)
-- End by asking where they'd like to start, offering options like: a moment, a meeting, a pattern they've noticed, a specific variable, a chapter from the book, or something else on their mind
+- Briefly note this is a reflective space (not coaching, not advice)
+- End by asking where they'd like to start — a moment, a meeting, a pattern, a variable, a chapter, whatever's on their mind
 
-Keep it to 3–4 short paragraphs. Conversational tone, not corporate. Vary the phrasing and structure each time."""
+Keep it to 2 short paragraphs, no more than 80 words total. Warm but understated British English tone — no exclamation marks, no corporate enthusiasm. Vary the phrasing each time."""
 
 
 async def generate_welcome_message(model: str = "claude-sonnet-4-6") -> str:
@@ -37,7 +37,7 @@ async def generate_welcome_message(model: str = "claude-sonnet-4-6") -> str:
     try:
         response = await client.messages.create(
             model=model,
-            max_tokens=300,
+            max_tokens=150,
             messages=[{"role": "user", "content": "Generate a welcome message."}],
             system=WELCOME_META_PROMPT,
         )
