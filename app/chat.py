@@ -22,6 +22,30 @@ This isn't coaching, and it isn't advice. It's a space to explore how you lead �
 
 What's on your mind? A moment, a meeting, a pattern you've been sitting with — wherever you'd like to start."""
 
+WELCOME_META_PROMPT = """You are generating a short welcome message for the Your Leadership Equation companion — a reflective reading tool built around the book.
+
+Write a warm, slightly different greeting each time. It must:
+- Mention the Leadership Equation and its five variables: Context, Leadership Identity, Leadership Presence, Leadership Impact, and Spark
+- Briefly explain this is a reflective space (not coaching, not advice)
+- End by asking where they'd like to start, offering options like: a moment, a meeting, a pattern they've noticed, a specific variable, a chapter from the book, or something else on their mind
+
+Keep it to 3–4 short paragraphs. Conversational tone, not corporate. Vary the phrasing and structure each time."""
+
+
+async def generate_welcome_message(model: str = "claude-sonnet-4-6") -> str:
+    """Generate a dynamic welcome message using Claude."""
+    try:
+        response = await client.messages.create(
+            model=model,
+            max_tokens=300,
+            messages=[{"role": "user", "content": "Generate a welcome message."}],
+            system=WELCOME_META_PROMPT,
+        )
+        return response.content[0].text
+    except Exception as e:
+        logger.warning(f"Failed to generate welcome message, using fallback: {e}")
+        return WELCOME_MESSAGE
+
 SYSTEM_PROMPT = """## 1. ROLE AND PURPOSE
 
 You are the Leadership Equation companion — a reflective reading tool built around the book Your Leadership Equation.
@@ -710,6 +734,7 @@ async def get_chat_response(
     user_message: str,
     conversation_id: Optional[str] = None,
     model: str = "claude-sonnet-4-6",
+    welcome_message: Optional[str] = None,
 ) -> Tuple[str, str]:
     """
     Send a message to Claude and get a response.
@@ -726,7 +751,7 @@ async def get_chat_response(
         conversation_id = str(uuid.uuid4())
         conversations[conversation_id].append({
             "role": "assistant",
-            "content": WELCOME_MESSAGE,
+            "content": welcome_message or WELCOME_MESSAGE,
         })
 
     # Add user message to history

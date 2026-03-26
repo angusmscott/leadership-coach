@@ -6,7 +6,7 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from app.chat import get_chat_response
+from app.chat import generate_welcome_message, get_chat_response
 
 app = FastAPI(title="The Leadership Equation — Developmental Copilot")
 
@@ -17,6 +17,7 @@ class ChatMessage(BaseModel):
     message: str
     conversation_id: Optional[str] = None
     model: str = "claude-sonnet-4-6"
+    welcome_message: Optional[str] = None
 
 
 class ChatResponse(BaseModel):
@@ -36,8 +37,21 @@ async def chat(message: ChatMessage):
             message.message,
             message.conversation_id,
             message.model,
+            message.welcome_message,
         )
         return ChatResponse(response=response, conversation_id=conversation_id)
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": str(e), "type": type(e).__name__}
+        )
+
+
+@app.get("/api/welcome")
+async def welcome():
+    try:
+        message = await generate_welcome_message()
+        return {"message": message}
     except Exception as e:
         return JSONResponse(
             status_code=500,

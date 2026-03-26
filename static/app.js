@@ -95,6 +95,7 @@ async function sendMessage(message) {
                 message: message,
                 conversation_id: conversationId,
                 model: modelSelect.value,
+                welcome_message: conversationId ? undefined : welcomeText,
             }),
         });
 
@@ -214,14 +215,24 @@ modalOverlay.addEventListener('click', (e) => {
 });
 
 // Welcome message
-function addWelcomeMessage() {
-    const welcome = `Welcome to the Your Leadership Equation companion — a reflective reading tool built around the book.
+const FALLBACK_WELCOME = `Welcome to the Your Leadership Equation companion — a reflective reading tool built around the book.
 
 This isn't coaching, and it isn't advice. It's a space to explore how you lead — which patterns show up, what they create, and where your awareness is growing.
 
 What's on your mind? A moment, a meeting, a pattern you've been sitting with — wherever you'd like to start.`;
 
-    addMessage(welcome, 'assistant', true);
+let welcomeText = FALLBACK_WELCOME;
+
+async function addWelcomeMessage() {
+    try {
+        const res = await fetch('/api/welcome');
+        if (!res.ok) throw new Error('Failed to fetch welcome');
+        const data = await res.json();
+        welcomeText = data.message;
+        addMessage(welcomeText, 'assistant', true);
+    } catch (e) {
+        addMessage(FALLBACK_WELCOME, 'assistant', true);
+    }
 }
 
 addWelcomeMessage();
