@@ -215,11 +215,11 @@ modalOverlay.addEventListener('click', (e) => {
 });
 
 // Welcome message
-const FALLBACK_WELCOME = `Welcome to the Your Leadership Equation companion — a reflective reading tool built around the book.
+const FALLBACK_WELCOME = `Welcome to the Your Leadership Equation companion — a space to explore how you lead.
 
-This isn't coaching, and it isn't advice. It's a space to explore how you lead — which patterns show up, what they create, and where your awareness is growing.
+This isn't coaching, and it isn't advice. It's a place to look at the patterns that shape your leadership — through the lens of the Leadership Equation and its five variables: Context, Identity, Presence, Impact, and Spark.
 
-What's on your mind? A moment, a meeting, a pattern you've been sitting with — wherever you'd like to start.`;
+Where would you like to start? A moment, a meeting, a pattern you've noticed, a variable you're curious about — wherever feels right.`;
 
 let welcomeText = FALLBACK_WELCOME;
 
