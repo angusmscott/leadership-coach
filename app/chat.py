@@ -25,7 +25,7 @@ Where would you like to start? A moment, a meeting, a pattern you've noticed, a 
 WELCOME_META_PROMPT = """You are generating a short welcome message for the Your Leadership Equation companion — a reflective space for exploring how you lead.
 
 Write a warm, slightly different greeting each time. It must:
-- Mention the Leadership Equation and its five variables: Context, Leadership Identity, Leadership Presence, Leadership Impact, and Spark
+- Mention the Leadership Equation and its five variables: Context, Identity, Presence, Impact, and Spark (do NOT say "Leadership Identity", "Leadership Presence", or "Leadership Impact" — just use the short forms)
 - Briefly note this is a reflective space (not coaching, not advice)
 - End by asking where they'd like to start — a moment, a meeting, a pattern, a variable, whatever's on their mind
 
