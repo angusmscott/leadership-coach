@@ -740,7 +740,13 @@ async def get_chat_response(
         response = await client.messages.create(
             model=model,
             max_tokens=1536,
-            system=SYSTEM_PROMPT,
+            system=[
+                {
+                    "type": "text",
+                    "text": SYSTEM_PROMPT,
+                    "cache_control": {"type": "ephemeral"},
+                }
+            ],
             messages=conversations[conversation_id],
         )
         assistant_message = response.content[0].text
