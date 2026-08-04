@@ -1,53 +1,102 @@
-# CLAUDE.md
+# The Leadership Equation — Developmental Copilot
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+A reflective AI companion for leaders, branded to ACT Leadership (actleader.com). Users have a structured chat conversation with Claude, which guides awareness-building through the Leadership Equation framework — not coaching, not advice.
 
-## Build and Run Commands
+## Stack
+
+- **Backend:** FastAPI + Python 3.9+, async throughout
+- **AI:** Anthropic SDK (`anthropic.AsyncAnthropic`), model `claude-sonnet-4-6`
+- **Frontend:** Vanilla JS, Jinja2 templates, no build step
+- **Deployment:** Railway via `Procfile` (`uvicorn app.main:app`), GitHub repo: `angusmscott/leadership-coach`
+- **Tests:** pytest + pytest-asyncio, httpx for ASGI transport
+
+## Project structure
+
+```
+app/
+  main.py     — FastAPI app: GET /, POST /api/chat, GET /health
+  chat.py     — Claude integration, in-memory conversation storage, system prompt
+static/
+  app.js      — Chat UI: message rendering, sidebar variable modals, welcome message
+  style.css   — ACT brand palette, dark theme, responsive layout
+templates/
+  index.html  — Single-page chat UI with equation sidebar
+tests/
+  test_api.py — Health and index smoke tests
+```
+
+## Running locally
 
 ```bash
-# Install dependencies
+cp .env.example .env   # add ANTHROPIC_API_KEY
 pip install -e ".[dev]"
-
-# Run development server
 uvicorn app.main:app --reload
-
-# Run tests
-pytest
-
-# Run a single test
-pytest tests/test_api.py::test_health
-
-# Lint code
-ruff check .
-
-# Format code
-ruff format .
 ```
 
-## Environment Setup
+Tests: `pytest`
+Lint/format: `ruff check .` / `ruff format .`
 
-Copy `.env.example` to `.env` and add your Anthropic API key:
-```bash
-cp .env.example .env
-```
+## Key architectural decisions
 
-## Architecture
+**Conversation storage** is in-process Python dict keyed by UUID (`conversations` in `chat.py`). No database — conversations are lost on restart. Intentional for MVP; a future version would need persistent storage.
 
-**Backend (FastAPI):**
-- `app/main.py` - API routes and app configuration. Serves the chat UI and handles `/api/chat` POST requests.
-- `app/chat.py` - Claude integration via `anthropic.AsyncAnthropic()`. Manages conversation history in-memory using conversation IDs.
+**Dynamic welcome message** is generated via a separate Claude call each session (`generate_welcome_message()`) using `WELCOME_META_PROMPT`, with `WELCOME_MESSAGE` as fallback. The welcome is injected as the first assistant turn before the user sends anything, keeping conversation history consistent.
 
-**Frontend:**
-- `templates/index.html` - Jinja2 template for the chat interface
-- `static/app.js` - Handles message sending, typing indicators, and conversation state
-- `static/style.css` - Chat UI styling
+**Prompt caching** is active on the system prompt (`cache_control: {"type": "ephemeral"}`). The system prompt is large (~700 lines). Do not remove caching.
 
-**API:**
-- `POST /api/chat` - Send a message and get a response. Accepts `{message: string, conversation_id?: string}`, returns `{response: string, conversation_id: string}`.
-- `GET /health` - Health check endpoint
+**System prompt** (`SYSTEM_PROMPT` in `chat.py`) is the core product. It is ~700 lines and encodes the full framework, conversation design, response units, example conversations, and hard constraints. Changes here are high-stakes — read it fully before editing.
 
-## Key Patterns
+**Do not book-reference** the companion. As of the v2 rewrite, it stands alone — no mentions of chapters, reading, or the book. This is intentional and must be preserved.
 
-- Conversations are tracked by UUID stored client-side; the server maintains message history keyed by this ID
-- The Anthropic client is initialized once at module load and reuses the `ANTHROPIC_API_KEY` from environment
-- All API handlers are async
+## The Leadership Equation framework (baked into system prompt)
+
+Five variables forming an infinity loop:
+- **i** (Leadership Identity) — the patterned version of the leader that runs automatically under pressure; constructed, not fixed
+- **U** (Leadership Presence) — how the leader shows up in real time; Felt U (inside) vs Expressed U (what others experience)
+- **x** (Leadership Impact) — what leadership creates in results and relationships; cannot be fully known from inside
+- **Spark** — the inner signal of meaning and aliveness; what makes change sustainable beyond habit
+- **Context** — the specific power, pace, and norms of the environment the leader is operating in now
+- **Lp** (Leadership Performance) — the output of the equation; measured in results and relationships together
+
+**ACT framework:** Awareness → Choice → Transformation (developmental arc; companion primarily supports Awareness)
+
+**Awareness levels:**
+- Level 1 — Reactive: pattern runs automatically, no gap, everything feels external
+- Level 2 — Reflective: pattern visible in hindsight
+- Level 3 — Responsive: pattern visible in real time, gap opens
+- **Critical rule:** do not ask a Level 3 question of a Level 1 user
+
+## AI behavioural constraints (non-negotiable)
+
+- British English spelling and phrasing
+- One question per response, always — never stacked
+- Short lines, white space — especially for mobile
+- Meet and Point structure: reflect user's words → check if needed → one question forward
+- Never diagnose, score, advise, or interpret beyond what the person shared
+- Never say "I'm not a coach" — show the boundary through behaviour
+- Never reference the book, chapters, or reading
+- One Sarah story anchor per conversation maximum
+- Never assume the user's pattern is control just because Sarah's was
+- If genuine distress surfaces, name it with care and point elsewhere
+
+## Conversation design (summary)
+
+**Arc:** Meet → Explore → Connect → Close
+
+**Variable entry paths** (follow energy, not a fixed sequence):
+- U → i → x (stress/pressure entry)
+- x → Context → U → i (feedback entry)
+- Context → U → i (new role entry)
+- Spark → i → U (flatness/meaning entry)
+- i → U → x (pattern entry)
+
+**Response units** exist for all five variables (detailed in system prompt). One unit per conversation — two at most. Each unit: insight + question + optional Sarah anchor. After the question, follow the user.
+
+**Sarah** — primary story anchor across all variables; used as mirror not template, one reference per conversation.
+
+## Brand / UI
+
+ACT brand palette: charcoal `#1a1a2e`, navy `#0f3460`, gold `#e8a838`, teal `#2a9d8f`, coral `#e76f51`.
+Fonts: Cormorant Garamond (display), DM Sans (body).
+Each variable has a distinct colour in the sidebar nav: Context (slate), i (gold), U (teal), x (coral), Spark (purple).
+Sidebar variable buttons open info modals with variable definitions (defined in `app.js` `variableInfo`).
