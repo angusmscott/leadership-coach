@@ -13,6 +13,9 @@ logger = logging.getLogger(__name__)
 
 client = anthropic.AsyncAnthropic()
 
+MODEL_SONNET = "claude-sonnet-5"
+MODEL_OPUS = "claude-opus-5"
+
 # In-memory conversation storage (replace with database for production)
 conversations: Dict[str, List[dict]] = defaultdict(list)
 
@@ -34,7 +37,7 @@ Do NOT mention the book, chapters, or reading. The companion stands on its own.
 Keep it to 2 short paragraphs, no more than 80 words total. Warm but understated British English tone — no exclamation marks, no corporate enthusiasm. Vary the phrasing each time."""
 
 
-async def generate_welcome_message(model: str = "claude-sonnet-4-6") -> str:
+async def generate_welcome_message(model: str = MODEL_OPUS) -> str:
     """Generate a dynamic welcome message using Claude."""
     try:
         response = await client.messages.create(
@@ -775,7 +778,7 @@ Key moves: enters through context first; holds space for both pattern and genuin
 async def get_chat_response(
     user_message: str,
     conversation_id: Optional[str] = None,
-    model: str = "claude-sonnet-4-6",
+    model: str = MODEL_OPUS,
     welcome_message: Optional[str] = None,
 ) -> Tuple[str, str]:
     """

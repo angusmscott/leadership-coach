@@ -6,7 +6,7 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from app.chat import generate_welcome_message, get_chat_response
+from app.chat import MODEL_OPUS, generate_welcome_message, get_chat_response
 
 app = FastAPI(title="The Leadership Equation — Developmental Copilot")
 
@@ -16,7 +16,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 class ChatMessage(BaseModel):
     message: str
     conversation_id: Optional[str] = None
-    model: str = "claude-sonnet-4-6"
+    model: str = MODEL_OPUS
     welcome_message: Optional[str] = None
 
 
