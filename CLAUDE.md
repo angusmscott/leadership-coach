@@ -5,7 +5,7 @@ A reflective AI companion for leaders, branded to ACT Leadership (actleader.com)
 ## Stack
 
 - **Backend:** FastAPI + Python 3.9+, async throughout
-- **AI:** Anthropic SDK (`anthropic.AsyncAnthropic`), model `claude-sonnet-4-6`
+- **AI:** Anthropic SDK (`anthropic.AsyncAnthropic`), models via `MODEL_SONNET`/`MODEL_OPUS` constants in `chat.py` (currently Claude 5 Sonnet/Opus), user-selectable in the UI
 - **Frontend:** Vanilla JS, Jinja2 templates, no build step
 - **Deployment:** Railway via `Procfile` (`uvicorn app.main:app`), GitHub repo: `angusmscott/leadership-coach`
 - **Tests:** pytest + pytest-asyncio, httpx for ASGI transport
@@ -93,6 +93,14 @@ Five variables forming an infinity loop:
 **Response units** exist for all five variables (detailed in system prompt). One unit per conversation — two at most. Each unit: insight + question + optional Sarah anchor. After the question, follow the user.
 
 **Sarah** — primary story anchor across all variables; used as mirror not template, one reference per conversation.
+
+## Roadmap / planned work
+
+**Lead capture registration page** — Mike Hutchins (owner of ACT, this app's business sponsor) wants a registration page in front of the chat to capture leads before he'll promote the tool. Not yet built.
+
+**CRM:** Mike uses **Freshsales** (Freshworks CRM) — freshsales.io. When the registration page is built, leads should be created there via the Freshsales REST API (API key auth, found in Freshsales admin under Settings → API Settings). Freshsales distinguishes Leads from Contacts — confirm with Mike which object type his instance uses before integrating, and whether he wants any custom fields populated (e.g. "how did you hear about us"). Need his API key and domain (e.g. `mikehutchins.freshsales.io`) before implementing.
+
+Notifying ACT of a new lead is a Freshsales-side concern, not ours — Freshsales Workflows (Admin → Automations → Workflows) can trigger email/Slack notifications on record creation. Our app only needs to create the Lead/Contact via the API; Mike configures the notification rule in his own Freshsales admin panel.
 
 ## Brand / UI
 
