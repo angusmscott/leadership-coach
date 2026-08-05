@@ -19,6 +19,14 @@ MODEL_OPUS = "claude-opus-5"
 # In-memory conversation storage (replace with database for production)
 conversations: Dict[str, List[dict]] = defaultdict(list)
 
+
+def _extract_text(response: anthropic.types.Message) -> str:
+    """Get the text from a response, skipping any leading thinking blocks."""
+    for block in response.content:
+        if block.type == "text":
+            return block.text
+    raise ValueError("No text block found in response")
+
 WELCOME_MESSAGE = """Welcome to the Your Leadership Equation companion — a space to explore how you lead.
 
 This isn't coaching, and it isn't advice. It's a place to look at the patterns that shape your leadership — through the lens of the Leadership Equation and its five variables: Context, Identity, Presence, Impact, and Spark.
@@ -46,7 +54,7 @@ async def generate_welcome_message(model: str = MODEL_OPUS) -> str:
             messages=[{"role": "user", "content": "Generate a welcome message."}],
             system=WELCOME_META_PROMPT,
         )
-        return response.content[0].text
+        return _extract_text(response)
     except Exception as e:
         logger.warning(f"Failed to generate welcome message, using fallback: {e}")
         return WELCOME_MESSAGE
@@ -819,7 +827,7 @@ async def get_chat_response(
             ],
             messages=conversations[conversation_id],
         )
-        assistant_message = response.content[0].text
+        assistant_message = _extract_text(response)
     except Exception as e:
         logger.error(f"Anthropic API error: {e}")
         raise
