@@ -102,6 +102,17 @@ Five variables forming an infinity loop:
 
 Notifying ACT of a new lead is a Freshsales-side concern, not ours — Freshsales Workflows (Admin → Automations → Workflows) can trigger email/Slack notifications on record creation. Our app only needs to create the Lead/Contact via the API; Mike configures the notification rule in his own Freshsales admin panel.
 
+**Prompt testing/eval harness** — Mike is iterating heavily on `SYSTEM_PROMPT` (his "secret sauce," tuning it to behave like an experienced coach) and is not technical, so the workflow needs to be entirely browser-based with no local setup. Planned design:
+
+1. Extract `SYSTEM_PROMPT` out of `chat.py` into its own plain text file so Mike can edit it directly via the GitHub web UI (no code, no local git).
+2. On every commit to that file, a GitHub Actions workflow runs automatically (GitHub's own hosted runners — not Railway; Railway only ever runs the deployed app, deployment and testing are independent/parallel, not gated on each other for this prototype since Mike is the only user).
+3. Two distinct checks run, because they answer different questions:
+   - **Regression check (did I break something?)** — scripted/simulated conversations run against the new prompt and get checked against hard rules (one question per turn, no advice-giving, single Sarah anchor per conversation, etc.) via a mix of mechanical string checks and an LLM-as-judge call. Shows as a pass/fail (green check / red X) next to the commit in GitHub.
+   - **Quality comparison (is it actually better?)** — the same conversations run through both the old and new prompt side by side, so Mike can use his own coaching judgment to compare, since "good coaching" is inherently a subjective call only he can really make — not something to fully automate.
+4. **Simulated user, not fixed scripts** — critical design point: test "conversations" should NOT use hardcoded user reply scripts. If the prompt changes, the bot may take a different path, and a fixed next line may no longer make sense as a reply. Instead, use a second Claude call to simulate the user — given a persona/situation brief (not literal lines), it reacts naturally to whatever the bot actually says each turn, keeping every test conversation coherent regardless of how the bot's behaviour shifts. This is a two-LLM setup: one plays the assistant (the actual product prompt), one plays the simulated user.
+
+Not yet built — plan only, agreed in principle with Mike, implementation pending.
+
 ## Brand / UI
 
 ACT brand palette: charcoal `#1a1a2e`, navy `#0f3460`, gold `#e8a838`, teal `#2a9d8f`, coral `#e76f51`.
