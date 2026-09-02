@@ -50,7 +50,7 @@ async def generate_welcome_message(model: str = MODEL_OPUS) -> str:
     try:
         response = await client.messages.create(
             model=model,
-            max_tokens=150,
+            max_tokens=400,
             messages=[{"role": "user", "content": "Generate a welcome message."}],
             system=WELCOME_META_PROMPT,
         )
